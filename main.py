@@ -6,7 +6,19 @@ from display.aqm1602a import AQM1602A
 
 def main():
     adc32 = ADC(32, atten=ADC.ATTN_0DB)
-    print(measureRMSCurrent(adc32, 3000, 10))
+    i2c0 = I2C(0)
+    disp = None
+    if 62 in i2c0.scan(): # ディスプレイが接続されている場合
+        disp = AQM1602A(i2c0)
+        disp.init()
+    else:
+        print('ディスプレイが接続されていません')
+    
+    current = measureRMSCurrent(adc32, 3000, 10)
+    print(current)
+    if(disp):
+        disp.write(f'{current:05.2f} A')
+
     
 
 
