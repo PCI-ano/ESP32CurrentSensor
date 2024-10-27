@@ -8,12 +8,15 @@ def main():
     adc32 = ADC(32, atten=ADC.ATTN_0DB)
     i2c0 = I2C(0)
     disp = None
-    if 62 in i2c0.scan(): # ディスプレイが接続されている場合
+
+    # ディスプレイの検出と初期化
+    if 62 in i2c0.scan():
         disp = AQM1602A(i2c0)
         disp.init()
     else:
         print('ディスプレイが接続されていません')
     
+    # 電流の繰り返し測定
     while True:
         current = measureRMSCurrent(adc32, 3000, 10)
         print(current)
@@ -24,9 +27,9 @@ def main():
     
 
 
-
+# 実効値電流の算出
 def measureRMSCurrent(adc, ratio, resistance):
-    # コールバック関数との合計値の受け渡しクラス 
+    # コールバック関数との 合計値,サンプリング回数 の受け渡しクラス 
     class Message:
         sum = 0
         count = 0
