@@ -14,10 +14,12 @@ def main():
     else:
         print('ディスプレイが接続されていません')
     
-    current = measureRMSCurrent(adc32, 3000, 10)
-    print(current)
-    if(disp):
-        disp.write(f'{current:05.2f} A')
+    while True:
+        current = measureRMSCurrent(adc32, 3000, 10)
+        print(current)
+        if(disp):
+            disp.write(f'{current:05.2f} A')
+        time.sleep_ms(5000)
 
     
 
